@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Dec 14 09:51:13 2020
-
-@author: zmzhang
-"""
 import sys
 import numpy as np
 from pylab import show, plot
