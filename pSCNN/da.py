@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Dec 18 15:12:32 2020
-
-@author: zmzhang
-"""
 import random
 import numpy as np
 from sklearn.utils import shuffle
@@ -100,8 +94,3 @@ def data_augmentation_2(spectra, c, n, m, maxn, noise_level=0.001):
     y  = np.hstack((y0, y1))
     R, S, y = shuffle(R, S, y)
     return {'R':R, 'S':S, 'y':y}
-
-
-
-
-
