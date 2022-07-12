@@ -12,6 +12,7 @@ The main packages can be seen in [requirements.txt](https://github.com/dyjfan/Au
 ## Data augmentation
 
 The mass spectral pairs of the training pSCNN1 and pSCNN2 models are obtained using the data_augmentation_1 and data_augmentation_2 functions.
+
     aug_eval1 = data_augmentation_1(spectra, n, maxn, noise_level=0.001)
     aug_eval2 = data_augmentation_2(spectra, c, n, m, maxn, noise_level=0.001)
 
@@ -24,6 +25,7 @@ The mass spectral pairs of the training pSCNN1 and pSCNN2 models are obtained us
 
 ## Model training
 Train the model based on your own training dataset with [build_pSCNN] function.
+
     model = build_pSCNN(para)
 
 *Optionnal args*
@@ -32,7 +34,9 @@ Train the model based on your own training dataset with [build_pSCNN] function.
 ## Automatic Resolution
 
 Automatic Resolution of GC-MS data files by using the [AutoRes] function.
+
     AutoRes(filename, model1, model2)
+    
 *Optionnal args*
 - filename : GC-MS data file path
 - model1 : pSCNN1 model
