@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Dec 19 21:19:39 2020
-
-@author: zmzhang
-"""
-
 from tensorflow.keras import Input, layers, models, optimizers, callbacks
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 import matplotlib.pyplot as plt
