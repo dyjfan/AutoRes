@@ -99,10 +99,3 @@ def plot_tic(tic):
     ax.set_ylabel('Intensity', fontsize=12)
     ax.set_title('TIC',fontsize=12)
     plt.show()
-
-if __name__ == '__main__':
-    
-    filename='../data/1.CDF'
-    ncr=netcdf_reader(filename,True)
-    tic=ncr.tic()
-    plot_tic(tic)
