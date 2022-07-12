@@ -409,13 +409,9 @@ def AutoRes(filename, model1, model2):
         if len(ls[j])<=20 and np.sum(m,1)[0]>=1.02*np.sum(m,1)[-1]:
             m0 = np.array(ncr.mat(ls[j][0]-4, ls[j][-1]+1).T, dtype='float32')
             t0=np.arange(ls[j][0]-4,ls[j][-1]+2)
-            plot(np.arange(ls[j][0]-4,ls[j][-1]+2),np.sum(m0,1))
-            show()
         else:
             m0 = np.array(ncr.mat(ls[j][0]+1, ls[j][-1]).T, dtype='float32')
             t0=np.arange(ls[j][0]+1,ls[j][-1])
-            plot(np.arange(ls[j][0]+1,ls[j][-1]+1),np.sum(m0,1))
-            show()
         m1 = np.array(ncr.mat(ls[j][0]-1, ls[j][-1]).T, dtype='float32')
         t1=np.arange(ls[j][0]-1,ls[j][-1]+1)
         def converts(m):
@@ -430,7 +426,6 @@ def AutoRes(filename, model1, model2):
             X=xX/np.max(xX)
             return X, xX
         X0, xX0 = converts(m0)
-        plot(np.sum(X0,1))
         X1,xX1 = converts(m1)
         u, s0, v = np.linalg.svd(X0)
         new_num=s0[s0>2*np.mean(s0)]
@@ -466,10 +461,11 @@ def AutoRes(filename, model1, model2):
             X = X0
             xX=xX0
        
-        plot_tic(re_X, xX, sta_C, sta_S)
+        #plot_tic(re_X, xX, sta_C, sta_S)
         sta_S0 = np.vstack((sta_S0,sta_S))
-        r_2_0.append(r2)
-        r_2_1.append(R2)
+        for i in range(len(sta_S)):
+            r_2_0.append(r2)
+            r_2_1.append(R2)
         for i in range(len(sta_S)):
             maxindex  = np.argmax(sta_C[:,i])
             tic=ncr.tic()
