@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Dec 14 09:51:13 2020
-
-@author: zmzhang
-"""
 import pickle
 from pSCNN.db import get_spectra_sqlite, save_spectra_sqlite, rand_sub_sqlite, rand_sub_sqlite1, \
                       get_mz_ranges, convert_to_dense, plot_mz_hist, filter_spectra
@@ -89,26 +83,8 @@ if __name__=="__main__":
     aug_eval2 = data_augmentation_2(spectra2, c1, 10000, 90000, maxn2, 0.001)
     eval_acc2 = evaluate_pSCNN(model2, [aug_eval2['R'], aug_eval2['S']], aug_eval2['y'])
     yp2 = predict_pSCNN(model2, [aug_eval2['R'], aug_eval2['S']])
-
-    #test AutoRes      
-    model_names = ['model/pSCNN1','model/pSCNN2']   
-    models = []
-    for i in range(len(model_names)):
-        model_name = model_names[i]
-        model = load_pSCNN(model_name)
-        models.append(model)
-    model1 = models[0]
-    model2 = models[1]
-    plot_loss_accuracy(model1)
-    plot_loss_accuracy(model2)
-    mz_range = (1, 1000)
+    #test AutoRes
     filename = 'D:/CDF/06-1.0-3.CDF'
     sta_S0, area0, rt0, r_2_0 = AutoRes(filename, model1, model2)
     filename = 'msp/S-06.MSP'
-    output_msp(filename, sta_S0, rt0)    
-        
-       
-
-        
-    
-    
+    output_msp(filename, sta_S0, rt0) 
