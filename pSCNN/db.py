@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Dec 14 20:56:26 2020
-
-@author: zmzhang
-"""
 import sqlite3 as sqlite
 import numpy as np
 import json, sys
