@@ -1,7 +1,9 @@
-numpy=1.21.2
-matplotlib=3.4.3
-scikit-learn=1.0
-tensorflow-gpu=2.5.0
-tqdm=4.62.3
-h5py=3.4.0
-sqlite=3.36.0
+numpy==1.21.2
+matplotlib==3.4.3
+scikit-learn==1.0
+tensorflow-gpu==2.5.0
+tqdm==4.62.3
+h5py==3.4.0
+sqlite==3.36.0
+seaborn==0.11.2
+scipy==1.7.1
