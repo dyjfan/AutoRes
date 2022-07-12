@@ -43,7 +43,9 @@ Automatic Resolution of GC-MS data files by using the [AutoRes] function.
 - model2 : pSCNN2 model
 
 ## Clone the repository and run it directly
-[git clone](https://github.com/dyjfan/AutoRes) 
+[git clone](https://github.com/dyjfan/AutoRes)
+
+An example has been provided in [test.ipynb]() script for the convenience of users.
 
 ## Contact
 - fanyingjie@csu.edu.cn
