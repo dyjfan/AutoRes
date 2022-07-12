@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Nov 23 10:30:17 2020
-
-@author: lenovo
-"""
-
 import scipy.io.netcdf as nc
 from scipy.sparse import coo_matrix
 from numpy import zeros,hstack,linspace
@@ -113,5 +106,3 @@ if __name__ == '__main__':
     ncr=netcdf_reader(filename,True)
     tic=ncr.tic()
     plot_tic(tic)
-    
-
