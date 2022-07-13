@@ -51,7 +51,6 @@ def train_pSCNN(model, Xs, y, fa, batch, epochs, min_lr):
                  ModelCheckpoint('D:/MODEL.h5', monitor='val_loss', verbose=1, save_best_only=True, save_weights_only=True)]
     model.fit(Xs3d, y, batch_size=batch, epochs=epochs, callbacks=callbacks, validation_split = 0.1)
         
-
 def plot_loss_accuracy(model):
     history = model.history.history
     fig = plt.figure(figsize=(8,6))
@@ -66,26 +65,7 @@ def plot_loss_accuracy(model):
     ax2.set_ylabel('Loss', fontsize=14)
     lines = plot1 + plot2 + plot3 + plot4
     ax1.legend(lines, [l.get_label() for l in lines], bbox_to_anchor=(0.98, 0.95))
-def plot_loss_accuracy1(model):
-    history = model.history.history
-    fig = plt.figure(figsize=(8,6))
-    ax1 = fig.add_subplot(111)
-    plot1 = ax1.plot(history['accuracy'], label = 'Acc_training')
-    plot2 = ax1.plot(history['val_accuracy'], label = 'Acc_validation')
-    ax2 = ax1.twinx()
-    plot3 = ax2.plot(history['loss'], label = 'Loss_training', color='#2ca02c')
-    plot4 = ax2.plot(history['val_loss'], label = 'Loss_validation', color='#d62728')
-    ax1.set_xlabel('Epoch', fontsize=20)
-    ax1.set_ylabel('Accuracy', fontsize=20)
-    ax2.set_ylabel('Loss', fontsize=20)
-    lines = plot1 + plot2 + plot3 + plot4
-    ax1.legend(lines, [l.get_label() for l in lines], bbox_to_anchor=(0.98, 0.95), fontsize=16)
-    ax1.set_title('pSCNN1', fontsize = 21)
-    ax1.tick_params(axis='x', labelsize=16 )
-    ax1.tick_params(axis='y', labelsize=16 )
-    ax2.tick_params(axis='y', labelsize=16 )
-    ax=plt.gca()
-    ax.yaxis.set_major_formatter(mtick.FormatStrFormatter('%.2f'))
+
 def build_pSCNN(para):
     spectra = get_spectra_sqlite(para['dbname'])
     convert_to_dense(spectra, para['mz_range'])
