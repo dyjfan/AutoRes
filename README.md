@@ -24,7 +24,7 @@ The mass spectral pairs of the training pSCNN1 and pSCNN2 models are obtained us
 - maxn ：Number of components
 
 ## Model training
-Train the model based on your own training dataset with [build_pSCNN] function.
+Train the model based on your own training dataset with [build_pSCNN] (https://github.com/dyjfan/AutoRes/blob/main/pSCNN/snn.py) function.
 
     model = build_pSCNN(para)
 
