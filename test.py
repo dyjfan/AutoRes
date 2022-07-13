@@ -88,10 +88,22 @@ if __name__=="__main__":
     yp2 = predict_pSCNN(model2, [aug_eval2['R'], aug_eval2['S']])
     
     #test AutoRes
-    filename = ['data/1-0.2-3.CDF']
-    msp = ['msp/1-0.2.MSP']
-    csv = ['results/1-0.2.csv'] 
-    for i in range(len(filename)):
+    filename = ['data/1-0.2-3.CDF', 'data/1-0.4-3.CDF',
+                'data/1-0.6-3.CDF', 'data/1-0.8-3.CDF',
+                'data/1-1.0-3.CDF', 'data/1-0.2-3.CDF',
+                'data/1-0.4-3.CDF', 'data/1-0.6-3.CDF',
+                'data/1-0.8-3.CDF', 'data/1-1.0-3.CDF']
+    msp = ['msp/1-0.2.MSP', 'msp/1-0.4.MSP', 
+           'msp/1-0.6.MSP', 'msp/1-0.8.MSP', 
+           'msp/1-1.0.MSP', 'msp/2-0.2.MSP',
+           'msp/2-0.4.MSP', 'msp/2-0.6.MSP',
+           'msp/2-0.8.MSP', 'msp/2-1.0.MSP']
+    csv = ['results/1-0.2.csv', 'results/1-0.4.csv',
+           'results/1-0.6.csv', 'results/1-0.8.csv',
+           'results/1-1.0.csv', 'results/2-0.2.csv',
+           'results/2-0.4.csv', 'results/2-0.6.csv',
+           'results/2-0.8.csv', 'results/2-1.0.csv']
+    for i in range(1):
         sta_S, area, rt, R2 = AutoRes(filename[i], model1, model2)
         output_msp(msp[i], sta_S, rt)
         df = pd.DataFrame({'rt': rt, 'area': area, 'R2': R2})
