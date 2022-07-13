@@ -4,7 +4,8 @@ from pSCNN.db import get_spectra_sqlite, get_mz_ranges, rand_sub_sqlite1, \
 from pSCNN.da import data_augmentation_1, data_augmentation_2
 from pSCNN.snn import plot_loss_accuracy, check_pSCNN, build_pSCNN, load_pSCNN, \
                       predict_pSCNN, evaluate_pSCNN
-from AutoRes.AutoRes import AutoRes, output_msp  
+from AutoRes.AutoRes import AutoRes, output_msp
+import pandas as pd
 
 if __name__=="__main__":
     spectra = get_spectra_sqlite('dataset/NIST_Spec.db')
@@ -87,7 +88,11 @@ if __name__=="__main__":
     yp2 = predict_pSCNN(model2, [aug_eval2['R'], aug_eval2['S']])
     
     #test AutoRes
-    filename = 'data/1-1.0-3.CDF'
-    sta_S, area, rt, R2 = AutoRes(filename, model1, model2)
-    filename = 'msp/1-1.0.MSP'
-    output_msp(filename, sta_S, rt)
+    filename = ['data/1-0.2-3.CDF']
+    msp = ['msp/1-0.2.MSP']
+    csv = ['results/1-0.2.csv'] 
+    for i in range(len(filename)):
+        sta_S, area, rt, R2 = AutoRes(filename[i], model1, model2)
+        output_msp(msp[i], sta_S, rt)
+        df = pd.DataFrame({'rt': rt, 'area': area, 'R2': R2})
+        df.to_csv(csv[0], index=False)
