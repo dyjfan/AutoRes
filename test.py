@@ -1,20 +1,20 @@
 import pickle
-from pSCNN.db import get_spectra_sqlite, save_spectra_sqlite, rand_sub_sqlite, rand_sub_sqlite1, \
-                      get_mz_ranges, convert_to_dense, plot_mz_hist, filter_spectra
+from pSCNN.db import get_spectra_sqlite, get_mz_ranges, rand_sub_sqlite1, \
+                      convert_to_dense, plot_mz_hist, filter_spectra
 from pSCNN.da import data_augmentation_1, data_augmentation_2
 from pSCNN.snn import plot_loss_accuracy, check_pSCNN, build_pSCNN, load_pSCNN, \
                       predict_pSCNN, evaluate_pSCNN
-from AutoRes.AutoRes import AutoRes, output_msp
-from AutoRes.NetCDF import netcdf_reader  
+from AutoRes.AutoRes import AutoRes, output_msp  
 
 if __name__=="__main__":
-    # spectra = get_spectra_sqlite('dataset/NIST_Spec.db')
-    # mz_ranges = get_mz_ranges(spectra)
-    # plot_mz_hist(mz_ranges)
-    # mz_range = (1, 1000)
-    # spectra_filtered = filter_spectra(spectra, mz_range)
-    # rand_sub_sqlite1(spectra_filtered, 'dataset/NIST_Spec-10000.db', 236283, 246283)
-    # rand_sub_sqlite1(spectra_filtered, 'dataset/NIST_Spec0-236200.db', 0, 236200)
+    spectra = get_spectra_sqlite('dataset/NIST_Spec.db')
+    mz_ranges = get_mz_ranges(spectra)
+    plot_mz_hist(mz_ranges)
+    mz_range = (1, 1000)
+    spectra_filtered = filter_spectra(spectra, mz_range)
+    rand_sub_sqlite1(spectra_filtered, 'dataset/NIST_Spec-10000.db', 236283, 246283)
+    rand_sub_sqlite1(spectra_filtered, 'dataset/NIST_Spec0-236200.db', 0, 236200)
+    
     '''
     c = sims('dataset/NIST_Spec0-236200.db', mz_range)
     with open('dataset/data.pk','wb') as file:
@@ -23,11 +23,12 @@ if __name__=="__main__":
     with open('dataset/data1.pk','wb') as file:
          pickle.dump(c1, file)
     '''
+    
     model_name1 = 'model/pSCNN1'
     model_name2 = 'model/pSCNN2'
     maxn1 = 1
     maxn2 = 3
-    mz_range = (1, 1000)
+    
     #train pSCNN1 model
     if check_pSCNN(model_name1):
         model1 = load_pSCNN(model_name1)
@@ -53,6 +54,7 @@ if __name__=="__main__":
     aug_eval1 = data_augmentation_1(spectra1, 100000, maxn1, 0.001)
     eval_acc1 = evaluate_pSCNN(model1, [aug_eval1['R'], aug_eval1['S']], aug_eval1['y'])
     yp1 = predict_pSCNN(model1, [aug_eval1['R'], aug_eval1['S']])    
+    
     #train pSCNN2 model
     with open('dataset/data.pk', 'rb') as file_1:
          c = pickle.load(file_1)  
@@ -83,8 +85,9 @@ if __name__=="__main__":
     aug_eval2 = data_augmentation_2(spectra2, c1, 10000, 90000, maxn2, 0.001)
     eval_acc2 = evaluate_pSCNN(model2, [aug_eval2['R'], aug_eval2['S']], aug_eval2['y'])
     yp2 = predict_pSCNN(model2, [aug_eval2['R'], aug_eval2['S']])
+    
     #test AutoRes
-    filename = 'D:/CDF/06-1.0-3.CDF'
-    sta_S0, area0, rt0, r_2_0 = AutoRes(filename, model1, model2)
-    filename = 'msp/S-06.MSP'
-    output_msp(filename, sta_S0, rt0) 
+    filename = 'data/1-1.0-3.CDF'
+    sta_S, area, rt, R2 = AutoRes(filename, model1, model2)
+    filename = 'msp/1-1.0.MSP'
+    output_msp(filename, sta_S, rt)
