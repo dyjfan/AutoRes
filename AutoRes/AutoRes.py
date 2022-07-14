@@ -1,9 +1,7 @@
 import sys
 import numpy as np
-from pylab import show, plot
 sys.path.append('../')
 from pSCNN.snn import predict_pSCNN
-from AutoRes.NetCDF import netcdf_reader 
 from sklearn.metrics import explained_variance_score
 from scipy.linalg import norm
 import matplotlib.pyplot as plt
@@ -40,19 +38,19 @@ def back_remove(xx, point, range_point):
     bias = xx - bak
     return bak, bias
 
-def plot_tic(re_X, xX, sta_C, sta_S):    
+def plot_tic(re_X, xX, sta_C, sta_S, names):    
     plt.figure()
     ax1 = plt.subplot(211)
     ax2 = plt.subplot(212)
     ax1.plot(np.sum(re_X, 1), label='re_chrom')
     ax1.plot(np.sum(xX, 1), label='actual_chrom')
     ax1.legend(fontsize=8)
-    ax1.set_xlim([0,xX.shape[0]-1])
+    ax1.set_xlim([0, xX.shape[0]-1])
     ax1.get_yaxis().get_major_formatter().set_scientific(False)
     colors=['g','b','r']
     for i in range(len(sta_S)):
-        name = 'compound'+str(i+1)
-        ax2.plot(np.sum(np.dot(np.array(sta_C[:,i], ndmin=2).T,np.array(sta_S[i], ndmin=2)), 1), label=name,color=colors[i])
+        name = names[i]
+        ax2.plot(np.sum(np.dot(np.array(sta_C[:, i], ndmin=2).T, np.array(sta_S[i], ndmin=2)), 1), label=name, color=colors[i])
     ax2.legend(fontsize=8)
     ax2.set_xlim([0, xX.shape[0]-1])
     ax1.set_xlabel('Retention Time')
@@ -62,7 +60,7 @@ def plot_tic(re_X, xX, sta_C, sta_S):
     ax2.set_ylabel('Intensity')
     ax2.get_yaxis().get_major_formatter().set_scientific(False)
     ax2.set_ylim(bottom=0)
-    x_major_locator=MultipleLocator(5)
+    x_major_locator=MultipleLocator(10)
     ax1.xaxis.set_major_locator(x_major_locator)
     ax2.xaxis.set_major_locator(x_major_locator)
     plt.show()
@@ -127,7 +125,7 @@ def contrain_FRR(c, s, m):
 
     for i, indd in enumerate(np.arange(ind2, len(c)-1, 1)):
         if c[indd+1] >= c[indd]:
-            c[indd+1]=0 
+            c[indd+1] = 0 
             break
         if c[indd+1] < 0:
             c[indd+1:len(c)] = 0
@@ -153,7 +151,7 @@ def best_index(X, n, index):
         ind_0 = np.append(ind_0, i)
         if i+1 not in index:
             if len(ind_0) > len(ind):
-                ind=ind_0
+                ind = ind_0
             ind_0 = np.zeros((0,), dtype=int)
     return ind
 
@@ -242,10 +240,10 @@ def MCR_SNN(X, xX, new_num, model1, model2):
         u, s, v = np.linalg.svd(xX)
         t = np.dot(u[:,0:1], np.diag(s[0:1]))
         cc1 = np.dot(np.dot(np.dot(t, np.linalg.pinv(np.dot(t.T, t))), t.T), np.sum(xX, 1))
-        cc1[cc1<0]=0
+        cc1[cc1<0] = 0
         cc1 = np.array(cc1/norm(cc1), ndmin=2)
         ss1 = np.dot(np.dot(np.linalg.pinv(np.dot(cc1, cc1.T)), cc1), xX)
-        ss1[ss1<0]=0
+        ss1[ss1<0] = 0
         
         xx1 = np.dot(cc1.T, ss1)
         r2 = explained_variance_score(xX, xx1, multioutput='variance_weighted')    
@@ -254,8 +252,8 @@ def MCR_SNN(X, xX, new_num, model1, model2):
         sta_S = np.zeros_like(ss1)
         sta_S[0] = ss1/np.max(ss1)*999
         sta_C = np.dot(np.dot(xX, sta_S.T), np.linalg.pinv(np.dot(sta_S, sta_S.T)))
-        sta_C[sta_C<0]=0
-        re_X=np.dot(sta_C,sta_S)
+        sta_C[sta_C<0] = 0
+        re_X =np.dot(sta_C, sta_S)
         R2 = explained_variance_score(xX, re_X, multioutput='variance_weighted')
     
     if len(new_num) == 2:
@@ -276,10 +274,10 @@ def MCR_SNN(X, xX, new_num, model1, model2):
         u, s, v = np.linalg.svd(xx2)
         t = np.dot(u[:,0:1], np.diag(s[0:1]))
         cc2 = np.dot(np.dot(np.dot(t, np.linalg.pinv(np.dot(t.T, t))), t.T), np.sum(xx2,1))
-        cc2[cc2<0]=0
+        cc2[cc2<0] = 0
         cc2 = np.array(cc2/norm(cc2), ndmin=2)
         ss2 = np.dot(np.dot(np.linalg.pinv(np.dot(cc2, cc2.T)), cc2), xx2)
-        ss2[ss2<0]=0
+        ss2[ss2<0] = 0
         
         xx2 = np.dot(cc2.T, ss2)
         re_x = xx1+xx2
@@ -297,8 +295,8 @@ def MCR_SNN(X, xX, new_num, model1, model2):
         sta_S[0] = S1[0]/np.max(S1[0])*999
         sta_S[1] = S1[1]/np.max(S1[1])*999
         sta_C = np.dot(np.dot(xX, sta_S.T), np.linalg.pinv(np.dot(sta_S, sta_S.T)))
-        sta_C[sta_C<0]=0
-        re_X=np.dot(sta_C, sta_S)
+        sta_C[sta_C<0] = 0
+        re_X = np.dot(sta_C, sta_S)
         R2 = explained_variance_score(xX, re_X, multioutput='variance_weighted')
     
     if len(new_num) == 3:
@@ -320,15 +318,15 @@ def MCR_SNN(X, xX, new_num, model1, model2):
         m3 = list(range(n_4, n_3))
         z3 = list(range(0, n_4))
         cc3, xx3 = FRR(X, s3, m3, z3, len(new_num))
-        xx2= X-xx1-xx3
+        xx2 = X-xx1-xx3
         
         u, s, v = np.linalg.svd(xx2)
         t = np.dot(u[:, 0:1], np.diag(s[0:1]))
-        cc2 = np.dot(np.dot(np.dot(t, np.linalg.pinv(np.dot(t.T, t))), t.T), np.sum(xx2,1))
-        cc2[cc2<0]=0
+        cc2 = np.dot(np.dot(np.dot(t, np.linalg.pinv(np.dot(t.T, t))), t.T), np.sum(xx2, 1))
+        cc2[cc2<0] = 0
         cc2 = np.array(cc2/norm(cc2), ndmin=2)
         ss2 = np.dot(np.dot(np.linalg.pinv(np.dot(cc2, cc2.T)), cc2), xx2)
-        ss2[ss2<0]=0
+        ss2[ss2<0] = 0
         
         xx2 = np.dot(cc2.T, ss2)
         re_x = xx1+xx2+xx3
@@ -338,9 +336,9 @@ def MCR_SNN(X, xX, new_num, model1, model2):
         re_C = np.vstack([np.array(cc1, ndmin=2), cc2, np.array(cc3, ndmin=2)]).T
         S1 = np.dot(np.dot(np.linalg.pinv(np.dot(re_C.T, re_C)), re_C.T), xX)
         for i in range(0, 200):
-            S1[S1<0]=0
-            C1 = np.dot(np.dot(xX,S1.T),np.linalg.pinv(np.dot(S1, S1.T)))
-            C1[C1<0]=0
+            S1[S1<0] = 0
+            C1 = np.dot(np.dot(xX, S1.T), np.linalg.pinv(np.dot(S1, S1.T)))
+            C1[C1<0] = 0
             S1 = np.dot(np.dot(np.linalg.pinv(np.dot(C1.T, C1)), C1.T), xX)
         
         sta_S = np.zeros_like(S1)
@@ -348,13 +346,12 @@ def MCR_SNN(X, xX, new_num, model1, model2):
         sta_S[1] = S1[1]/np.max(S1[1])*999
         sta_S[2] = S1[2]/np.max(S1[2])*999
         sta_C = np.dot(np.dot(xX, sta_S.T), np.linalg.pinv(np.dot(sta_S, sta_S.T)))
-        sta_C[sta_C<0]=0
-        re_X=np.dot(sta_C, sta_S)
+        sta_C[sta_C<0] = 0
+        re_X = np.dot(sta_C, sta_S)
         R2 = explained_variance_score(xX, re_X, multioutput='variance_weighted')
     return sta_S, sta_C, re_X, r2, R2
 
-def AutoRes(filename, model1, model2):
-    ncr = netcdf_reader(filename, True)
+def AutoRes(ncr, model1, model2):
     m = np.array(ncr.mat(0, len(ncr.tic()['rt'])-1).T, dtype='float32')
     ms = np.array(ncr.mz_rt(10)['mz'], dtype='int')
     mz_range = (1, 1000)
@@ -366,22 +363,22 @@ def AutoRes(filename, model1, model2):
         itensity_dense = np.zeros_like(mz_dense)
         itensity_dense[ms-mz_min] = m[i]
         X[i] = itensity_dense
-        X[i][X[i]<0]=0
+        X[i][X[i]<0] = 0
     num = len(X)//500
     io = np.empty(0, dtype='int32')
     for i in range(num-1):
-        X0=X[500*i:500*(i+1)]
-        ind = np.arange(500*i,500*(i+1),1, dtype='int32')
+        X0 = X[500*i:500*(i+1)]
+        ind = np.arange(500*i,500*(i+1), 1, dtype='int32')
         xX, bias = back_remove(X0, 4, 10)
-        xX[xX<0]=0
-        noise=np.mean(np.sort(np.sum(xX, 1))[0:300])
+        xX[xX<0] = 0
+        noise = np.mean(np.sort(np.sum(xX, 1))[0:300])
         ind_0 = np.argwhere(np.sum(xX, 1) >= 3*noise)[:, 0]
         io = np.hstack((io, ind[ind_0]))
-    X0=X[500*(num-1):len(X)]
-    ind = np.arange(500*(num-1),len(X),1, dtype='int32')
-    xX, bias = back_remove(X0, 4, 10)
-    xX[xX<0]=0
-    noise=np.mean(np.sort(np.sum(xX, 1))[0:300])
+    X0 = X[500*(num-1): len(X)]
+    ind = np.arange(500*(num-1),len(X), 1, dtype='int32')
+    xX, bias = back_remove(X0, 4, 10) 
+    xX[xX<0] = 0
+    noise = np.mean(np.sort(np.sum(xX, 1))[0:300])
     ind_1 = np.argwhere(np.sum(xX, 1) >= 3*noise)[:, 0]
     io = np.hstack((io, ind[ind_1]))
     l= []
@@ -392,28 +389,28 @@ def AutoRes(filename, model1, model2):
            if len(l)>=7:
                ls.append(l)
            l=[]
-    ls[0]=list(range(ls[0][0]-5,ls[0][-1]+1)) 
-    ls[-1]=list(range(ls[-1][0],ls[-1][-1]+6))
+    ls[0] = list(range(ls[0][0]-5, ls[0][-1]+1)) 
+    ls[-1] = list(range(ls[-1][0], ls[-1][-1]+6))
     for i in range(len(ls)-1):
         if ls[i+1][0]-ls[i][-1]>=8:
-            ls[i]=list(range(ls[i][0],ls[i][-1]+6))
-            ls[i+1]=list(range(ls[i+1][0]-5,ls[i+1][-1]+1))    
+            ls[i] = list(range(ls[i][0], ls[i][-1]+6))
+            ls[i+1] = list(range(ls[i+1][0]-5, ls[i+1][-1]+1))    
             
-    sta_S0=np.empty((0,1000), dtype='float32')
-    rt=[]
-    area=[]
-    r_2_0=[]
-    r_2_1=[]
+    sta_S0=np.empty((0, 1000), dtype='float32')
+    rt    = []
+    area  = []
+    r_2_0 = []
+    r_2_1 = []
     for j in range(len(ls)):
         m = np.array(ncr.mat(ls[j][0], ls[j][-1]).T, dtype='float32')
-        if len(ls[j])<=20 and np.sum(m,1)[0]>=1.02*np.sum(m,1)[-1]:
+        if len(ls[j])<=20 and np.sum(m,1)[0]>=1.02*np.sum(m, 1)[-1]:
             m0 = np.array(ncr.mat(ls[j][0]-4, ls[j][-1]+1).T, dtype='float32')
-            t0=np.arange(ls[j][0]-4,ls[j][-1]+2)
+            t0 = np.arange(ls[j][0]-4, ls[j][-1]+2)
         else:
             m0 = np.array(ncr.mat(ls[j][0]+1, ls[j][-1]).T, dtype='float32')
-            t0=np.arange(ls[j][0]+1,ls[j][-1])
+            t0 = np.arange(ls[j][0]+1, ls[j][-1])
         m1 = np.array(ncr.mat(ls[j][0]-1, ls[j][-1]).T, dtype='float32')
-        t1=np.arange(ls[j][0]-1,ls[j][-1]+1)
+        t1 = np.arange(ls[j][0]-1, ls[j][-1]+1)
         def converts(m):
             X = np.zeros((m.shape[0], mz_max), dtype = np.float32)
             for i in range(m.shape[0]):
@@ -422,13 +419,13 @@ def AutoRes(filename, model1, model2):
                 X[i] = itensity_dense
                 X[i][X[i]<0]=0
             xX, bias = back_remove(X, 4, 10)
-            xX[xX<0]=0
-            X=xX/np.max(xX)
+            xX[xX<0] = 0
+            X = xX/np.max(xX)
             return X, xX
         X0, xX0 = converts(m0)
-        X1,xX1 = converts(m1)
+        X1, xX1 = converts(m1)
         u, s0, v = np.linalg.svd(X0)
-        new_num=s0[s0>2*np.mean(s0)]
+        new_num = s0[s0>2*np.mean(s0)]
         if len(new_num)>1:
             try:
                 S_0, C_0, re_X_0, r2_0, R2_0 = MCR_SNN(X0, xX0, new_num, model1, model2)
@@ -446,37 +443,46 @@ def AutoRes(filename, model1, model2):
                     S_1, C_1, re_X_1, r2_1, R2_1 = MCR_SNN(X1, xX1, new_num[0:-1][0:-1], model1, model2)
             if r2_0 > r2_1:
                 sta_S, sta_C, re_X, r2, R2 = S_0, C_0, re_X_0, r2_0, R2_0
-                t=t0
+                t = t0
                 X = X0
-                xX=xX0
+                xX = xX0
             else:
                 sta_S, sta_C, re_X, r2, R2 = S_1, C_1, re_X_1, r2_1, R2_1
-                t=t1
+                t = t1
                 X = X1
-                xX=xX1
+                xX = xX1
+            if len(S_0) > len(S_1):
+                sta_S, sta_C, re_X, r2, R2 = S_0, C_0, re_X_0, r2_0, R2_0
+                t = t0
+                X = X0
+                xX = xX0
+            if len(S_1) > len(S_0):
+                sta_S, sta_C, re_X, r2, R2 = S_1, C_1, re_X_1, r2_1, R2_1
+                t = t1
+                X = X1
+                xX = xX1
        
         if len(new_num)==1:
-            sta_S, sta_C, re_X, r2, R2= MCR_SNN(X0, xX0, new_num, model1, model2)
-            t=t0
+            sta_S, sta_C, re_X, r2, R2 = MCR_SNN(X0, xX0, new_num, model1, model2)
+            t = t0
             X = X0
-            xX=xX0
-       
-        #plot_tic(re_X, xX, sta_C, sta_S)
-        sta_S0 = np.vstack((sta_S0,sta_S))
+            xX = xX0
+        
+        sta_S0 = np.vstack((sta_S0, sta_S))
         for i in range(len(sta_S)):
             r_2_0.append(r2)
             r_2_1.append(R2)
         for i in range(len(sta_S)):
-            maxindex  = np.argmax(sta_C[:,i])
-            tic=ncr.tic()
-            rt0=round(tic['rt'][t[maxindex]].astype(np.float32), 2)
+            maxindex  = np.argmax(sta_C[:, i])
+            tic = ncr.tic()
+            rt0 = round(tic['rt'][t[maxindex]].astype(np.float32), 2)
             rt.append(rt0)
-            compound=np.trapz(np.sum(np.dot(np.array(sta_C[:,i], ndmin=2).T,np.array(sta_S[i], ndmin=2)), 1, dtype='float32'))
+            compound = np.trapz(np.sum(np.dot(np.array(sta_C[:, i], ndmin=2).T,np.array(sta_S[i], ndmin=2)), 1, dtype='float32'))
             area.append(compound)
     return sta_S0, area, rt, r_2_1
 
 def output_msp(filename, sta_S, RT):
-    sta_S[sta_S<3]=0
+    sta_S[sta_S<3] = 0
     f = open(filename, "x")
     for i in range(len(sta_S)):
         f.write("Name: ")
