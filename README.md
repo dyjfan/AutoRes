@@ -2,6 +2,13 @@
 
 This is the code repo for the paper *Deep Learning-based Method for Automatic Resolution of GC-MS Data from Complex Samples*. We proposed an Automatic Resolution method (AutoRes) for overlapped peaks in complex GC-MS data based on the pseudo-Siamese convolutional neural network (pSCNN) architecture. It consists of two pSCNN models (pSCNN1 and pSCNN2) with the same architecture but different inputs. Two pSCNN models were trained with 400,000 augmented spectral pairs, respectively. They can predict the selective region (pSCNN1) and elution region (pSCNN2) of compounds in an untargeted manner. The predicted regions are used as inputs to the full rank resolution (FRR) method, which can be easily achieved for the overlapping peaks.
 
+<div align="center">
+<img src="https://raw.githubusercontent.com/dyjfan/AutoRes/blob/main/workflow.jpg" width=809 height=600 />
+</div>
+
+
+
+
 ### Package required:
 We recommend to use [conda](https://conda.io/docs/user-guide/install/download.html) and [pip](https://pypi.org/project/pip/).
 - [python3](https://www.python.org/)
