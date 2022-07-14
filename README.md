@@ -33,7 +33,7 @@ Train the model based on your own training dataset with [build_pSCNN](https://gi
 
 ## Automatic Resolution
 
-Automatic Resolution of GC-MS data files by using the [AutoRes](https://github.com/dyjfan/AutoRes/blob/main/AutoRes/AutoRes.py#L356) function.
+Automatic Resolution of GC-MS data files by using the [AutoRes](https://github.com/dyjfan/AutoRes/blob/main/AutoRes/AutoRes.py#L354) function.
 
     AutoRes(filename, model1, model2)
     
