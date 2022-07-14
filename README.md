@@ -49,6 +49,7 @@ An example has been provided in [test.ipynb](https://github.com/dyjfan/AutoRes/b
 
 ## Download the data and run directly
 We have uploaded some of the data to Zenodo due to the training data overrun. 
+
 [https://doi.org/10.5281/zenodo.6833447](https://doi.org/10.5281/zenodo.6833447)
 
 ## Contact
