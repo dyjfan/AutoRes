@@ -18,7 +18,6 @@ if __name__=="__main__":
     spectra_filtered = filter_spectra(spectra, mz_range)
     rand_sub_sqlite1(spectra_filtered, 'dataset/NIST_Spec-10000.db', 236283, 246283)
     rand_sub_sqlite1(spectra_filtered, 'dataset/NIST_Spec0-236200.db', 0, 236200)
-   
     c = sims('dataset/NIST_Spec0-236200.db', mz_range)
     with open('dataset/data.pk','wb') as file:
          pickle.dump(c, file)
