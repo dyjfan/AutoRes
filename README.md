@@ -56,8 +56,8 @@ Automatic Resolution of GC-MS data files by using the [AutoRes](https://github.c
 
 An example has been provided in [test.ipynb](https://github.com/dyjfan/AutoRes/blob/main/test.ipynb) script for the convenience of users.
 
-## Download the dataset and run directly
-We have uploaded some of the dataset to Zenodo due to the training data overrun.
+## Download the data and run directly
+We have uploaded some of the data to Zenodo due to the training data overrun.
 
 [https://doi.org/10.5281/zenodo.6864797](https://doi.org/10.5281/zenodo.6864797)
 
