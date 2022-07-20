@@ -3,7 +3,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLRO
 import matplotlib.pyplot as plt
 import pickle, os
 from pSCNN.db import get_spectra_sqlite, convert_to_dense
-from pSCNN.da import data_augmentation_1, data_augmentation_3
+from pSCNN.da import data_augmentation_1, data_augmentation_2
 import matplotlib.ticker as mtick
 
 def create_input_layers(xshapes):
