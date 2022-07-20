@@ -90,7 +90,7 @@ if __name__=="__main__":
     yp2 = predict_pSCNN(model2, [aug_eval2['R'], aug_eval2['S']])
     
     # test AutoRes
-    path = 'data'
+    path = 'D:/AutoRes/data'
     files = os.listdir(path)
     for filename in files:
         ncr = netcdf_reader(path + '/' + filename, True)
