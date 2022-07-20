@@ -1,4 +1,4 @@
-import pickle
+import pickle, os
 from pSCNN.db import get_spectra_sqlite, get_mz_ranges, rand_sub_sqlite1, \
                       convert_to_dense, plot_mz_hist, filter_spectra
 from pSCNN.da import data_augmentation_1, data_augmentation_2
@@ -90,24 +90,13 @@ if __name__=="__main__":
     yp2 = predict_pSCNN(model2, [aug_eval2['R'], aug_eval2['S']])
     
     # test AutoRes
-    filename = ['data/1-0.2-3.CDF', 'data/1-0.4-3.CDF',
-                'data/1-0.6-3.CDF', 'data/1-0.8-3.CDF',
-                'data/1-1.0-3.CDF', 'data/1-0.2-3.CDF',
-                'data/1-0.4-3.CDF', 'data/1-0.6-3.CDF',
-                'data/1-0.8-3.CDF', 'data/1-1.0-3.CDF']
-    msp = ['msp/1-0.2.MSP', 'msp/1-0.4.MSP', 
-           'msp/1-0.6.MSP', 'msp/1-0.8.MSP', 
-           'msp/1-1.0.MSP', 'msp/2-0.2.MSP',
-           'msp/2-0.4.MSP', 'msp/2-0.6.MSP',
-           'msp/2-0.8.MSP', 'msp/2-1.0.MSP']
-    csv = ['results/1-0.2.csv', 'results/1-0.4.csv',
-           'results/1-0.6.csv', 'results/1-0.8.csv',
-           'results/1-1.0.csv', 'results/2-0.2.csv',
-           'results/2-0.4.csv', 'results/2-0.6.csv',
-           'results/2-0.8.csv', 'results/2-1.0.csv']
-    for i in range(len(filename)):
-        ncr = netcdf_reader(filename[i], True)
+    path = 'D:/AutoRes/data'
+    files = os.listdir(path)
+    for filename in files:
+        ncr = netcdf_reader(path + '/' + filename, True)
         sta_S, area, rt, R2 = AutoRes(ncr, model1, model2)
-        output_msp(msp[i], sta_S, rt)
+        msp = filename.split('.CDF')[0] + '.MSP'
+        output_msp(path + '/'+ msp, sta_S, rt)
+        csv = filename.split('.CDF')[0] + '.csv'
         df = pd.DataFrame({'rt': rt, 'area': area, 'R2': R2})
-        df.to_csv(csv[i], index=False)
+        df.to_csv(path + '/' + csv, index = False)
