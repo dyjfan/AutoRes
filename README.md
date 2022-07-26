@@ -56,7 +56,7 @@ Automatic Resolution of GC-MS data files by using the [AutoRes](https://github.c
 
 An example has been provided in [test.ipynb](https://github.com/dyjfan/AutoRes/blob/main/test.ipynb) script for the convenience of users. Users can run it directly by placing the unzipped data file and AutoRes-1.0 file in the same directory after downloading.
 
-It should be noted that the NIST_Spec.db database is not available for download due to copyright reasons. Users who need to use the library should obtain the copyright of NiST
+It should be noted that the NIST_Spec.db database is not available for download due to copyright reasons. Users who need to use the database should obtain the copyright of NiST
 
 ## Contact
 - fanyingjie@csu.edu.cn
