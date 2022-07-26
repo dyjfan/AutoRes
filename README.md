@@ -26,10 +26,10 @@ The mass spectral pairs of the training pSCNN1 and pSCNN2 models are obtained us
     aug_eval2 = data_augmentation_2(spectra, c, n, m, maxn, noise_level=0.001)
 
 *Optionnal args*
-- spectra : Mass Spectrometry Database 
-- c : Highly similar mass spectrometry sub libraries
-- n ：Number of amplified mass spectrometry pairs
-- m : Number of amplified mass spectrometry pairs with high similarity.
+- spectra : Mass spectral library 
+- c : The similar sublibrary
+- n ：Number of amplified mass spectral pairs
+- m : Number of amplified mass spectral pairs with high similarity.
 - maxn ：Number of components
 
 ## Model training
