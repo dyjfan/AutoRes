@@ -11,6 +11,7 @@ import pandas as pd
 if __name__=="__main__":
     '''
     # Splitting the dataset
+    # NIST_Spec
     spectra = get_spectra_sqlite('dataset/NIST_Spec.db')
     mz_ranges = get_mz_ranges(spectra)
     plot_mz_hist(mz_ranges)
