@@ -27,7 +27,7 @@ The mass spectral pairs of the training pSCNN1 and pSCNN2 models are obtained us
 
 *Optionnal args*
 - spectra : Mass spectral library 
-- c : The similar sublibrary
+- c : imilar sublibrary
 - n ：Number of amplified mass spectral pairs
 - m : Number of amplified mass spectral pairs with high similarity.
 - maxn ：Number of components
@@ -55,11 +55,6 @@ Automatic Resolution of GC-MS data files by using the [AutoRes](https://github.c
 [git clone](https://github.com/dyjfan/AutoRes)
 
 An example has been provided in [test.ipynb](https://github.com/dyjfan/AutoRes/blob/main/test.ipynb) script for the convenience of users.
-
-## Download the data and run directly
-We have uploaded some of the data to Zenodo due to the training data overrun.
-
-[https://doi.org/10.5281/zenodo.6864797](https://doi.org/10.5281/zenodo.6864797)
 
 ## Contact
 - fanyingjie@csu.edu.cn
