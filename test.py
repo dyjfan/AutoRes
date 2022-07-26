@@ -11,7 +11,7 @@ import pandas as pd
 if __name__=="__main__":
     '''
     # Splitting the dataset
-    # NIST17 Mass Spectral Library (NIST_Spec.db) requires copyright. Users who need to use the library should obtain the copyright of NiST.
+    # It should be noted that the NIST_Spec.db database is not available for download due to copyright reasons.
     spectra = get_spectra_sqlite('dataset/NIST_Spec.db')
     mz_ranges = get_mz_ranges(spectra)
     plot_mz_hist(mz_ranges)
