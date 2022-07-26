@@ -16,12 +16,12 @@ if __name__=="__main__":
     plot_mz_hist(mz_ranges)
     mz_range = (1, 1000)
     spectra_filtered = filter_spectra(spectra, mz_range)
-    rand_sub_sqlite1(spectra_filtered, 'dataset/NIST_Spec-10000.db', 236283, 246283)
-    rand_sub_sqlite1(spectra_filtered, 'dataset/NIST_Spec0-236200.db', 0, 236200)
-    c = sims('dataset/NIST_Spec0-236200.db', mz_range)
+    rand_sub_sqlite1(spectra_filtered, 'dataset/test_sublibrary.db', 257376, 267376)
+    rand_sub_sqlite1(spectra_filtered, 'dataset/training_sublibrary.db', 0, 257376)
+    c = sims('dataset/training_sublibrary.db', mz_range)
     with open('dataset/data.pk','wb') as file:
          pickle.dump(c, file)
-    c1 = sims('dataset/NIST_Spec-10000.db', mz_range)
+    c1 = sims('dataset/test_sublibrary.db', mz_range)
     with open('dataset/data1.pk','wb') as file:
          pickle.dump(c1, file)
     '''
@@ -36,7 +36,7 @@ if __name__=="__main__":
     if check_pSCNN(model_name1):
         model1 = load_pSCNN(model_name1)
     else:
-        para = {'dbname': 'dataset/NIST_Spec0-236200.db',
+        para = {'dbname': 'dataset/training_sublibrary.db',
                 'mz_range': mz_range, 
                 'aug_num': 200000,
                 'noise_level': 0.001,
@@ -51,7 +51,7 @@ if __name__=="__main__":
         model1 = build_pSCNN(para)
     plot_loss_accuracy(model1)
     # test pSCNN1 model
-    dbname1 = 'dataset/NIST_Spec-10000.db'
+    dbname1 = 'dataset/test_sublibrary.db'
     spectra1 = get_spectra_sqlite(dbname1)
     convert_to_dense(spectra1, mz_range)  
     aug_eval1 = data_augmentation_1(spectra1, 100000, maxn1, 0.001)
@@ -64,7 +64,7 @@ if __name__=="__main__":
     if check_pSCNN(model_name2):
         model2 = load_pSCNN(model_name2)
     else:
-        para = {'dbname': 'dataset/NIST_Spec0-236200.db',
+        para = {'dbname': 'dataset/training_sublibrary.db',
                 'mz_range': mz_range,
                 'aug_num0': 100000,
                 'aug_num1': 100000,
@@ -83,7 +83,7 @@ if __name__=="__main__":
     # test pSCNN2 model
     with open('dataset/data1.pk', 'rb') as file_1:
          c1 = pickle.load(file_1) 
-    spectra2 = get_spectra_sqlite('dataset/NIST_Spec-10000.db')
+    spectra2 = get_spectra_sqlite('dataset/test_sublibrary.db')
     convert_to_dense(spectra2, mz_range)
     aug_eval2 = data_augmentation_2(spectra2, c1, 10000, 90000, maxn2, 0.001)
     eval_acc2 = evaluate_pSCNN(model2, [aug_eval2['R'], aug_eval2['S']], aug_eval2['y'])
