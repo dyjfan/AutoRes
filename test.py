@@ -1,12 +1,13 @@
-import pickle, os
+import pickle, os, sys
 from pSCNN.db import get_spectra_sqlite, get_mz_ranges, rand_sub_sqlite1, \
                       convert_to_dense, plot_mz_hist, filter_spectra
 from pSCNN.da import data_augmentation_1, data_augmentation_2
 from pSCNN.snn import plot_loss_accuracy, check_pSCNN, build_pSCNN, load_pSCNN, \
                       predict_pSCNN, evaluate_pSCNN
-from AutoRes.AutoRes import AutoRes, output_msp
+from AutoRes.AutoRes import AutoRes, output_msp, AutoRes_alignment
 from AutoRes.NetCDF import netcdf_reader
 import pandas as pd
+sys.path.append('../')
 
 if __name__=="__main__":
     '''
@@ -91,13 +92,20 @@ if __name__=="__main__":
     yp2 = predict_pSCNN(model2, [aug_eval2['R'], aug_eval2['S']])
     
     # test AutoRes
-    path = 'D:/AutoRes/data'
+    path = '../data'
     files = os.listdir(path)
-    for filename in files:
-        ncr = netcdf_reader(path + '/' + filename, True)
-        sta_S, area, rt, R2 = AutoRes(ncr, model1, model2)
-        msp = filename.split('.CDF')[0] + '.MSP'
-        output_msp(path + '/'+ msp, sta_S, rt)
-        csv = filename.split('.CDF')[0] + '.csv'
-        df = pd.DataFrame({'rt': rt, 'area': area, 'R2': R2})
-        df.to_csv(path + '/' + csv, index = False)
+    Alignment_or_not = True
+    if Alignment_or_not:
+        df = AutoRes_alignment(path, files[0:5], model1, model2)
+        df.to_csv(path + '/' + 'Set1.csv', index=False)
+        df = AutoRes_alignment(path, files[5:10], model1, model2)
+        df.to_csv(path + '/' + 'Set2.csv', index=False)
+    else:
+        for filename in files:
+            ncr = netcdf_reader(path + '/' + filename, True)
+            sta_S, area, rt, R2 = AutoRes(ncr, model1, model2)
+            msp = filename.split('.CDF')[0] + '.MSP'
+            output_msp(path + '/'+ msp, sta_S, rt)
+            csv = filename.split('.CDF')[0] + '.csv'
+            df = pd.DataFrame({'rt': rt, 'area': area, 'R2': R2})
+            df.to_csv(path + '/' + csv, index = False)
