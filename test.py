@@ -5,8 +5,8 @@ from pSCNN.da import data_augmentation_1, data_augmentation_2
 from pSCNN.snn import plot_loss_accuracy, check_pSCNN, build_pSCNN, load_pSCNN, \
                       predict_pSCNN, evaluate_pSCNN
 from AutoRes.AutoRes import AutoRes, output_msp, AutoRes_alignment
-from AutoRes.NetCDF import netcdf_reader
 import pandas as pd
+from AutoRes.NetCDF import netcdf_reader  
 sys.path.append('../')
 
 if __name__=="__main__":
@@ -97,9 +97,9 @@ if __name__=="__main__":
     Alignment_or_not = True
     if Alignment_or_not:
         df = AutoRes_alignment(path, files[0:5], model1, model2)
-        df.to_csv(path + '/' + 'Set1.csv', index=False)
+        df.to_csv(path + '/' + 'SetⅠ.csv', index=False)
         df = AutoRes_alignment(path, files[5:10], model1, model2)
-        df.to_csv(path + '/' + 'Set2.csv', index=False)
+        df.to_csv(path + '/' + 'SetⅡ.csv', index=False)
     else:
         for filename in files:
             ncr = netcdf_reader(path + '/' + filename, True)
