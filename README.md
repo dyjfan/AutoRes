@@ -27,7 +27,7 @@ The mass spectral pairs of the training pSCNN1 and pSCNN2 models are obtained us
 
 *Optionnal args*
 - spectra : Mass spectral library 
-- c : imilar sublibrary
+- c : Similar sublibrary
 - n ：Number of amplified mass spectral pairs
 - m : Number of amplified mass spectral pairs with high similarity.
 - maxn ：Number of components
