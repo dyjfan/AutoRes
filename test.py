@@ -103,7 +103,7 @@ if __name__=="__main__":
     else:
         for filename in files:
             ncr = netcdf_reader(path + '/' + filename, True)
-            sta_S, area, rt, R2 = AutoRes(ncr, model1, model2)
+            sta_S, area, rt, R2 = AutoRes(ncr, model1, model2, filename)
             msp = filename.split('.CDF')[0] + '.MSP'
             output_msp(path + '/'+ msp, sta_S, rt)
             csv = filename.split('.CDF')[0] + '.csv'
