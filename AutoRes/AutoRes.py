@@ -1,4 +1,5 @@
 import sys
+from tqdm import tqdm
 import numpy as np
 sys.path.append('../')
 from pSCNN.snn import predict_pSCNN
@@ -354,7 +355,7 @@ def MCR_SNN(X, xX, new_num, model1, model2):
         R2 = explained_variance_score(xX, re_X, multioutput='variance_weighted')
     return sta_S, sta_C, re_X, r2, R2
 
-def AutoRes(ncr, model1, model2):
+def AutoRes(ncr, model1, model2, filename):
     m = np.array(ncr.mat(0, len(ncr.tic()['rt'])-1).T, dtype='float32')
     ms = np.array(ncr.mz_rt(10)['mz'], dtype='int')
     mz_range = (1, 1000)
@@ -404,7 +405,7 @@ def AutoRes(ncr, model1, model2):
     area  = []
     r_2_0 = []
     r_2_1 = []
-    for j in range(len(ls)):
+    for j in tqdm(range(len(ls)), desc=filename):
         m = np.array(ncr.mat(ls[j][0], ls[j][-1]).T, dtype='float32')
         if len(ls[j])<=20 and np.sum(m,1)[0]>=1.02*np.sum(m, 1)[-1]:
             m0 = np.array(ncr.mat(ls[j][0]-4, ls[j][-1]+1).T, dtype='float32')
@@ -493,7 +494,7 @@ def AutoRes_alignment(path, files, model1, model2):
     A = []
     for filename in files:
         ncr = netcdf_reader(path + '/' + filename, True)
-        sta_S, area, rt, R2 = AutoRes(ncr, model1, model2)
+        sta_S, area, rt, R2 = AutoRes(ncr, model1, model2, filename)
         msp = filename.split('.CDF')[0] + '.MSP'
         output_msp(path + '/'+ msp, sta_S, rt)
         T.append(rt)
