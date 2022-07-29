@@ -1,4 +1,4 @@
-import pickle, os, sys
+import pickle, os, sys, time
 from pSCNN.db import get_spectra_sqlite, get_mz_ranges, rand_sub_sqlite1, \
                       convert_to_dense, plot_mz_hist, filter_spectra
 from pSCNN.da import data_augmentation_1, data_augmentation_2
@@ -92,6 +92,7 @@ if __name__=="__main__":
     yp2 = predict_pSCNN(model2, [aug_eval2['R'], aug_eval2['S']])
     
     # test AutoRes
+    start = time.time()
     path = '../data'
     files = os.listdir(path)
     Alignment_or_not = True
@@ -109,3 +110,5 @@ if __name__=="__main__":
             csv = filename.split('.CDF')[0] + '.csv'
             df = pd.DataFrame({'rt': rt, 'area': area, 'R2': R2})
             df.to_csv(path + '/' + csv, index = False)
+    end = time.time()
+    print("Running time: %.2fs"%(end - start))
