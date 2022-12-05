@@ -44,12 +44,13 @@ Train the model based on your own training dataset with [build_pSCNN](https://gi
 
 Automatic Resolution of GC-MS data files by using the [AutoRes](https://github.com/dyjfan/AutoRes/blob/main/AutoRes/AutoRes.py#L633) function.
 
-    AutoRes(ncr, model1, model2)
+    AutoRes(ncr, model1, model2, filename)
     
 *Optionnal args*
 - ncr : GC-MS data
 - model1 : pSCNN1 model
 - model2 : pSCNN2 model
+- filename : GC-MS data filename
 
 ## Clone the repository and run it directly
 [git clone](https://github.com/dyjfan/AutoRes)
