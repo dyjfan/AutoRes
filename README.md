@@ -17,6 +17,10 @@ We recommend to use [conda](https://conda.io/docs/user-guide/install/download.ht
 - [tensorflow](https://www.tensorflow.org) 
 
 By using the environment.yml, [`requirements.txt`](https://github.com/dyjfan/AutoRes/blob/main/requirements.txt) file, it will install all the required packages.
+    git clone https://github.com/zmzhang/SigmaCCS.git
+    cd AutoRes
+    conda env create -f environment.yml
+    conda activate autores
 
 ## Data augmentation
 
