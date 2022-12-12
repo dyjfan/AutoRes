@@ -16,7 +16,7 @@ We recommend to use [conda](https://conda.io/docs/user-guide/install/download.ht
 - [python3](https://www.python.org/)
 - [tensorflow](https://www.tensorflow.org) 
 
-By using the environment.yml, [`requirements.txt`](https://github.com/dyjfan/AutoRes/blob/main/requirements.txt) file, it will install all the required packages.
+By using the [`environment.yml`](https://github.com/dyjfan/AutoRes/blob/main/environment.yml), [`requirements.txt`](https://github.com/dyjfan/AutoRes/blob/main/requirements.txt) file, it will install all the required packages.
     
     git clone https://github.com/dyjfan/AutoRes.git
     cd AutoRes
