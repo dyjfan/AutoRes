@@ -21,6 +21,18 @@ def augment_negative(spectra, ids4n, low=0.1, high=1.0):
     return x
 
 def data_augmentation_1(spectra, n, maxn, noise_level=0.001):
+    '''
+    DA1 method
+    
+    input
+        spectra: Mass spectral library
+        n： Number of amplified mass spectral pairs
+        maxn: Number of components
+        noise_level: noise level
+    
+    output
+        Augmented dataset
+    '''
     p  = spectra[0]['mz_dense'].shape[0]
     s  = len(spectra)
     Rp = np.zeros((n, p), dtype = np.float32)
@@ -45,6 +57,20 @@ def data_augmentation_1(spectra, n, maxn, noise_level=0.001):
     return {'R':R, 'S':S, 'y':y}
 
 def data_augmentation_2(spectra, c, n, m, maxn, noise_level=0.001):
+    '''
+    DA2 method
+    
+    input
+        spectra: Mass spectral library
+        c: Similar sublibrary
+        n： Number of amplified mass spectral pairs
+        m: Number of amplified mass spectral pairs with high similarity
+        maxn: Number of components
+        noise_level: noise level
+    
+    output
+        Augmented dataset
+    '''
     p  = spectra[0]['mz_dense'].shape[0]
     s  = len(c)
     Rp0 = np.zeros((n, p), dtype = np.float32)

@@ -48,20 +48,19 @@ def plot_tic(re_X, xX, sta_C, sta_S, names):
     ax2 = plt.subplot(212)
     ax1.plot(np.sum(re_X, 1), label='re_chrom')
     ax1.plot(np.sum(xX, 1), label='actual_chrom')
-    ax1.legend(fontsize=8)
-    ax1.set_xlim([0, xX.shape[0]-1])
+    ax1.legend(fontsize=10)
+    ax1.set_xlim([0,xX.shape[0]-1])
     ax1.get_yaxis().get_major_formatter().set_scientific(False)
-    colors=['g','b','r']
+    colors=['g', 'b']#['r', 'g', 'b', 'y','#ff7f0e']
     for i in range(len(sta_S)):
-        name = names[i]
-        ax2.plot(np.sum(np.dot(np.array(sta_C[:, i], ndmin=2).T, np.array(sta_S[i], ndmin=2)), 1), label=name, color=colors[i])
-    ax2.legend(fontsize=8)
+        ax2.plot(np.sum(np.dot(np.array(sta_C[:,i], ndmin=2).T,np.array(sta_S[i], ndmin=2)), 1), label=names[i],color=colors[i])
+    ax2.legend(fontsize=9,loc='upper right')
     ax2.set_xlim([0, xX.shape[0]-1])
-    ax1.set_xlabel('Retention Time')
-    ax1.set_ylabel('Intensity')
+    ax1.set_xlabel('Retention Time', fontsize=12)
+    ax1.set_ylabel('Intensity', fontsize=12)
     ax1.set_ylim(bottom=0)
-    ax2.set_xlabel('Scans')
-    ax2.set_ylabel('Intensity')
+    ax2.set_xlabel('Scans (point)', fontsize=12)
+    ax2.set_ylabel('Intensity', fontsize=12)
     ax2.get_yaxis().get_major_formatter().set_scientific(False)
     ax2.set_ylim(bottom=0)
     x_major_locator=MultipleLocator(10)
@@ -414,12 +413,9 @@ def max_r2_5(X, d_1, d_2, d_3, d_4, com, model1, model2):
                                         n_8 = ind_8
                                         if R2>0.995:
                                             return r_2, n_1, n_2, n_3, n_4, n_5, n_6, n_7, n_8   
-    return r_2, n_1, n_2, n_3, n_4, n_5, n_6, n_7, n_8 
+    return r_2, n_1, n_2, n_3, n_4, n_5, n_6, n_7, n_8    
 
-def MCR_SNN(X, xX, new_num, model1, model2): 
-    if len(new_num) > 3:
-        print('Peak:'+str(len(new_num))+': The overlapping peak contains more than three components.')
-    
+def MCR_SNN(X, xX, new_num, sn, model1, model2): 
     if len(new_num) == 1:
         u, s, v = np.linalg.svd(xX)
         t = np.dot(u[:,0:1], np.diag(s[0:1]))
@@ -430,7 +426,7 @@ def MCR_SNN(X, xX, new_num, model1, model2):
         ss1[ss1<0] = 0
         
         xx1 = np.dot(cc1.T, ss1)
-        r2 = explained_variance_score(xX, xx1, multioutput='variance_weighted')
+        r2 = explained_variance_score(xX, xx1, multioutput='variance_weighted')    
         
         sta_S = np.zeros_like(ss1)
         sta_S[0] = ss1/np.max(ss1)*999
@@ -574,7 +570,7 @@ def MCR_SNN(X, xX, new_num, model1, model2):
         sta_C[sta_C<0]=0
         re_X=np.dot(sta_C, sta_S)
         R2 = explained_variance_score(xX, re_X, multioutput='variance_weighted')
-        
+    
     if len(new_num)==5:
         R0 = np.zeros_like(X)
         for i in range(len(X)):
@@ -631,6 +627,18 @@ def MCR_SNN(X, xX, new_num, model1, model2):
     return sta_S, sta_C, re_X, r2, R2
 
 def AutoRes(ncr, model1, model2, filename):
+    '''
+    Automatic resolution of GC-MS data file
+    
+    input
+        ncr: GC-MS data
+        model1: pSCNN1 model
+        model2: pSCNN2 model
+        filename: GC-MS data filename
+    
+    output
+        Resolution results
+    '''
     m = np.array(ncr.mat(0, len(ncr.tic()['rt'])-1).T, dtype='float32')
     ms = np.array(ncr.mz_rt(10)['mz'], dtype='int')
     mz_range = (1, 1000)
@@ -751,11 +759,22 @@ def AutoRes(ncr, model1, model2, filename):
                 rt.append(rt0)
                 compound = np.trapz(np.sum(np.dot(np.array(sta_C[:, i], ndmin=2).T,np.array(sta_S[i], ndmin=2)), 1, dtype='float32'))
                 area.append(compound)
-                names.append('rt: '+str(rt0))
-        #plot_tic(re_X, xX, sta_C, sta_S, names)
+                names.append('rt: '+str(rt0))    
     return sta_S0, area, rt, r_2_1
 
 def AutoRes_alignment(path, files, model1, model2):
+    '''
+    Automatic batch resolution of GC-MS data files
+    
+    input
+        path: GC-MS data path
+        files: GC-MS data filename
+        model1: pSCNN1 model
+        model2: pSCNN2 model
+    
+    output
+        Resolution results
+    '''
     T = []
     S = []
     A = []
@@ -893,6 +912,17 @@ def AutoRes_alignment(path, files, model1, model2):
     return df
 
 def output_msp(filename, sta_S, RT):
+    '''
+    Output the resolved mass spectra as msp files
+    
+    input
+        filename: File output path
+        sta_S: Mass spectra
+        RT: Retention time
+    
+    output
+        msp files
+    '''
     sta_S[sta_S<3] = 0
     f = open(filename, "x")
     for i in range(len(sta_S)):

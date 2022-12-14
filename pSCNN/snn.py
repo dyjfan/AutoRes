@@ -67,12 +67,21 @@ def plot_loss_accuracy(model):
     ax1.legend(lines, [l.get_label() for l in lines], bbox_to_anchor=(0.98, 0.95))
 
 def build_pSCNN(para):
+    '''
+    Build and train the model
+    
+    input
+        para: Hyperparameters for model training
+    
+    output
+        model
+    '''
     spectra = get_spectra_sqlite(para['dbname'])
     convert_to_dense(spectra, para['mz_range'])
     if para['maxn'] == 1:
         aug = data_augmentation_1(spectra, para['aug_num'], para['maxn'], para['noise_level'])
     else:
-        aug = data_augmentation_3(spectra, para['c'], para['aug_num0'], para['aug_num1'], para['maxn'], para['noise_level'])
+        aug = data_augmentation_2(spectra, para['c'], para['aug_num0'], para['aug_num1'], para['maxn'], para['noise_level'])
     model = pSCNN([aug['R'].shape, aug['S'].shape], para['lr'], para['layer_num'])
     train_pSCNN(model, [aug['R'], aug['S']], aug['y'], para['factor'], para['batch'], para['epoch'], para['min_lr'])
     save_pSCNN(model, para['model_name'])
@@ -85,6 +94,15 @@ def save_pSCNN(model, model_name):
     pickle.dump(model.history.history, open(history_path, "wb" ))
 
 def load_pSCNN(model_name):
+    '''
+    Load the trained model
+    
+    input
+        model_name: model name
+    
+    output
+        model
+    '''
     model_path = f'{model_name}.h5'
     history_path = f'{model_name}.pkl'
     model = models.load_model(model_path) 
@@ -99,9 +117,29 @@ def check_pSCNN(model_name):
     return os.path.isfile(model_path) and os.path.isfile(history_path) 
 
 def predict_pSCNN(model, Xs):
+    '''
+    Model Prediction
+    
+    input
+        model: pSCNN
+        Xs： Model Input Data
+    
+    output
+        Model prediction results
+    '''
     Xs3d = [X.reshape((X.shape[0], X.shape[1], 1)) for X in Xs]
     return model.predict(Xs3d)
 
 def evaluate_pSCNN(model, Xs, y):
+    '''
+    Model Evaluation
+    
+    input
+        model: pSCNN
+        Xs： Model Input Data
+        y: 
+    output
+        Model prediction results
+    '''
     Xs3d = [X.reshape((X.shape[0], X.shape[1], 1)) for X in Xs]
     return model.evaluate(Xs3d, y)
