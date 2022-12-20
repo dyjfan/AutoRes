@@ -7,7 +7,9 @@ from pSCNN.snn import plot_loss_accuracy, check_pSCNN, build_pSCNN, load_pSCNN, 
 from AutoRes.AutoRes import AutoRes, output_msp, AutoRes_alignment
 import pandas as pd
 from AutoRes.NetCDF import netcdf_reader  
-sys.path.append('../')
+import warnings
+import wget
+from zipfile import ZipFile
 
 if __name__=="__main__":
     '''
@@ -27,12 +29,18 @@ if __name__=="__main__":
     with open('dataset/data1.pk','wb') as file:
          pickle.dump(c1, file)
     '''
+    # Download plant essential oil dataset
+    url = "https://github.com/dyjfan/AutoRes/releases/download/1.0/data.zip"
+    save_path = wget.download(url, ".")
+    with ZipFile(save_path, 'r') as zip:
+        zip.extractall(path = ".")
+    path = save_path[:-4]
     
+    mz_range = (1, 1000)
     model_name1 = 'model/pSCNN1'
     model_name2 = 'model/pSCNN2'
     maxn1 = 1
     maxn2 = 3
-    mz_range = (1, 1000)
     
     # train pSCNN1 model
     if check_pSCNN(model_name1):
@@ -93,7 +101,6 @@ if __name__=="__main__":
     
     # test AutoRes
     start = time.time()
-    path = '../data'
     files = os.listdir(path)
     Alignment_or_not = True
     if Alignment_or_not:
